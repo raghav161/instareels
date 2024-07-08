@@ -1,0 +1,98 @@
+.videoFooter{
+  height: 0px;
+  margin : 0;
+  padding : 0;
+}
+
+.videoFooter__text {
+    position: absolute;
+    bottom: 10%;
+    color: #fff;
+    display: flex;
+    margin-bottom: 20px;
+    margin-left: 10px;
+  }
+
+  .videoFooter__ticker{
+    position: relative;
+    bottom: 80px;
+    margin-left: 10px;
+    background-color: rgba(165, 165, 165, 0.5); /* Gray with 50% transparency */
+    backdrop-filter: blur(3px);
+    border-radius: 20px;
+    margin-right: 150px;
+    height: 25px;
+    padding: 3px;
+    padding-left: 10px;
+  } 
+  
+  .videoFooter__text > h3 {
+    margin-left: 10px;
+    padding-bottom: 20px;
+    font-size: 15px;
+    margin-top: 5px;
+  }
+  
+.videoFooter__text > h3 > button {
+  margin-left: 10px;
+    color: #fff;
+    font-weight: 900;
+    text-transform: inherit;
+    border: 1px solid white; /* Add white border */
+    padding: 3px; /* Add padding to make it look like a box */
+    border-radius: 5px; /* Optional: Adds rounded corners */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.videoFooter__text > h3 > button:hover {
+    background-color: white; /* Change background color on hover */
+    color: black; /* Change text color on hover */
+}
+
+  
+  .flex-box {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .videoFooter__ticker > .ticker{
+    width : 60%;
+    bottom: 24px;
+    margin-left: 30px;
+    height: fit-content;
+  }
+  .videoFooter__ticker h1{
+    font-size: 12px;
+    color: white;
+  }
+  .videoFooter__icon{
+
+    color: white;
+  }
+
+  .videoFooter__actions {
+    display: flex;
+    position: absolute;
+    width: 95%;
+    bottom : 15px;
+    color: white;
+    justify-content: space-between;
+  }
+
+  .videoFooter__actionsLeft > .MuiSvgIcon-root {
+    padding: 0px 5px;
+  }
+
+  .videoFooter__actionsRight {
+    display: flex;
+  }
+  .videoFooter__stat{
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+  }
+  .videoFooter__stat > p{
+    margin-left: 3px;
+  }
