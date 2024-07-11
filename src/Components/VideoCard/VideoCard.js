@@ -7,11 +7,11 @@ import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 
 const VideoCard = ({ url, likes, shares, channel, song, avatarSrc }) => {
     const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-    const [isMuted, setIsMuted] = useState(false);
+    const [isMuted, setIsMuted] = useState(true);
     const [volume, setVolume] = useState(50);
     const videoRef = useRef(null);
 
-    const onVideoPress = useCallback(() => {
+    const onVideoPress = () => {
         if (isVideoPlaying) {
             videoRef.current.pause();
             setIsVideoPlaying(false);
@@ -19,7 +19,7 @@ const VideoCard = ({ url, likes, shares, channel, song, avatarSrc }) => {
             videoRef.current.play();
             setIsVideoPlaying(true);
         }
-    }, [isVideoPlaying]);
+    };
 
     const handleMutePress = useCallback(() => {
         setIsMuted((prevIsMuted) => {
@@ -46,10 +46,8 @@ const VideoCard = ({ url, likes, shares, channel, song, avatarSrc }) => {
     const handleKeyPress = useCallback((event) => {
         if (event.key === 'm' || event.key === 'M') {
             handleMutePress();
-        } else if (event.key === ' ' || event.key === 'Spacebar' || event.key === 'K' || event.key === 'k' ) {
-            onVideoPress();
         }
-    }, [handleMutePress, onVideoPress]);
+    }, [handleMutePress]);
 
     useEffect(() => {
         window.addEventListener('keydown', handleKeyPress);
