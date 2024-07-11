@@ -1,15 +1,17 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import './VideoCard.css';
 import VideoHeader from '../VideoHeader/VideoHeader';
 import VideoFooter from '../VideoFooter/VideoFooter';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 
-const VideoCard = ({ url, likes, shares, channel, song, avatarSrc, isMuted, onMutePress }) => {
+const VideoCard = ({ url, likes, shares, channel, song, avatarSrc }) => {
     const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+    const [isMuted, setIsMuted] = useState(false);
+    const [volume, setVolume] = useState(50);
     const videoRef = useRef(null);
 
-    const onVideoPress = () => {
+    const onVideoPress = useCallback(() => {
         if (isVideoPlaying) {
             videoRef.current.pause();
             setIsVideoPlaying(false);
@@ -17,7 +19,44 @@ const VideoCard = ({ url, likes, shares, channel, song, avatarSrc, isMuted, onMu
             videoRef.current.play();
             setIsVideoPlaying(true);
         }
+    }, [isVideoPlaying]);
+
+    const handleMutePress = useCallback(() => {
+        setIsMuted((prevIsMuted) => {
+            const newMutedState = !prevIsMuted;
+            setVolume(newMutedState ? 0 : 50);
+            return newMutedState;
+        });
+    }, []);
+
+    const handleVolumeChange = (event) => {
+        const newVolume = parseFloat(event.target.value);
+        setVolume(newVolume);
+
+        if (videoRef.current) {
+            videoRef.current.volume = newVolume / 100;
+            if (newVolume === 0) {
+                setIsMuted(true);
+            } else {
+                setIsMuted(false);
+            }
+        }
     };
+
+    const handleKeyPress = useCallback((event) => {
+        if (event.key === 'm' || event.key === 'M') {
+            handleMutePress();
+        } else if (event.key === ' ' || event.key === 'Spacebar' || event.key === 'K' || event.key === 'k' ) {
+            onVideoPress();
+        }
+    }, [handleMutePress, onVideoPress]);
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyPress);
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [handleKeyPress]);
 
     useEffect(() => {
         const currentVideoRef = videoRef.current;
@@ -52,7 +91,7 @@ const VideoCard = ({ url, likes, shares, channel, song, avatarSrc, isMuted, onMu
 
     useEffect(() => {
         if (videoRef.current) {
-            videoRef.current.muted = isMuted; 
+            videoRef.current.muted = isMuted;
         }
     }, [isMuted]);
 
@@ -67,9 +106,19 @@ const VideoCard = ({ url, likes, shares, channel, song, avatarSrc, isMuted, onMu
                 loop
                 muted={isMuted}
             />
-            <button className='muteButton' onClick={onMutePress}>
-                {isMuted ? <VolumeOffIcon /> : <VolumeUpIcon />}
-            </button>
+            <div className='volumeControlContainer'>
+                <button className='muteButton' onClick={handleMutePress}>
+                    {isMuted ? <VolumeOffIcon /> : <VolumeUpIcon />}
+                </button>
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={volume}
+                    onChange={handleVolumeChange}
+                    className="volumeControl__slider"
+                />
+            </div>
             <VideoFooter
                 channel={channel}
                 song={song}

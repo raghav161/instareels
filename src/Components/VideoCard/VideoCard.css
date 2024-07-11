@@ -1,13 +1,13 @@
-.videoCard{
+.videoCard {
     width: 100%;
     height: 100%;
     scroll-snap-align: center;
-    border : 1px solid black;
+    border: 1px solid black;
     position: relative;
-    background-color : transparent;
+    background-color: transparent;
 }
 
-.videoCard__player{
+.videoCard__player {
     object-fit: fill;
     width: 100%;
     height: 100%;
@@ -15,8 +15,8 @@
 
 .muteButton {
     position: absolute;
-    bottom: 60px;
-    right: 20px;
+    bottom: -10px;
+    right: -44px;
     background: rgba(0, 0, 0, 0.5);
     border: none;
     color: white;
@@ -27,4 +27,40 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.volumeControlContainer {
+    position: absolute;
+    bottom: 47px;
+    right: 50px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px;
+    border-radius: 50px;
+}
+
+.volumeControl__slider {
+    width: 100px;
+    display: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background: gray;
+    outline: none;
+    height: 5px;
+    border-radius: 5px;
+}
+
+.volumeControl__slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+}
+
+
+.volumeControlContainer:hover .volumeControl__slider {
+    display: block;
+    color: white
 }
