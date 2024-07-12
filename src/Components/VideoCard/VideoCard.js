@@ -5,10 +5,8 @@ import VideoFooter from '../VideoFooter/VideoFooter';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 
-const VideoCard = ({ url, likes, shares, channel, song, avatarSrc }) => {
+const VideoCard = ({ url, likes, shares, channel, song, avatarSrc, isMuted, onMutePress, volume, onVolumeChange }) => {
     const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-    const [isMuted, setIsMuted] = useState(true);
-    const [volume, setVolume] = useState(50);
     const videoRef = useRef(null);
 
     const onVideoPress = () => {
@@ -21,33 +19,11 @@ const VideoCard = ({ url, likes, shares, channel, song, avatarSrc }) => {
         }
     };
 
-    const handleMutePress = useCallback(() => {
-        setIsMuted((prevIsMuted) => {
-            const newMutedState = !prevIsMuted;
-            setVolume(newMutedState ? 0 : 50);
-            return newMutedState;
-        });
-    }, []);
-
-    const handleVolumeChange = (event) => {
-        const newVolume = parseFloat(event.target.value);
-        setVolume(newVolume);
-
-        if (videoRef.current) {
-            videoRef.current.volume = newVolume / 100;
-            if (newVolume === 0) {
-                setIsMuted(true);
-            } else {
-                setIsMuted(false);
-            }
-        }
-    };
-
     const handleKeyPress = useCallback((event) => {
         if (event.key === 'm' || event.key === 'M') {
-            handleMutePress();
+            onMutePress();
         }
-    }, [handleMutePress]);
+    }, [onMutePress]);
 
     useEffect(() => {
         window.addEventListener('keydown', handleKeyPress);
@@ -58,7 +34,6 @@ const VideoCard = ({ url, likes, shares, channel, song, avatarSrc }) => {
 
     useEffect(() => {
         const currentVideoRef = videoRef.current;
-
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
@@ -92,6 +67,17 @@ const VideoCard = ({ url, likes, shares, channel, song, avatarSrc }) => {
             videoRef.current.muted = isMuted;
         }
     }, [isMuted]);
+    /*React’s state management and the DOM are separate. While React manages state, you often need 
+    to interact with the actual DOM elements for certain properties that aren't directly handled by 
+    React (like the muted property of a video element). In this case, the useEffect hook ensures 
+    that whenever the isMuted state changes, the actual video element's muted property is updated 
+    to reflect that state. This keeps the DOM in sync with the React state. */
+
+    useEffect(() => {
+        if (videoRef.current) {
+            videoRef.current.volume = volume / 100;
+        }
+    }, [volume]);
 
     return (
         <div className='videoCard'>
@@ -105,15 +91,15 @@ const VideoCard = ({ url, likes, shares, channel, song, avatarSrc }) => {
                 muted={isMuted}
             />
             <div className='volumeControlContainer'>
-                <button className='muteButton' onClick={handleMutePress}>
-                    {isMuted ? <VolumeOffIcon /> : <VolumeUpIcon />}
+                <button className='muteButton' onClick={onMutePress}>
+                    {isMuted || volume === 0 ? <VolumeOffIcon /> : <VolumeUpIcon />}
                 </button>
                 <input
                     type="range"
                     min="0"
                     max="100"
                     value={volume}
-                    onChange={handleVolumeChange}
+                    onChange={onVolumeChange}
                     className="volumeControl__slider"
                 />
             </div>

@@ -5,7 +5,8 @@ import db from './Components/FireBaseConfig/FirebaseConfig';
 
 function App() {
     const [reels, setReels] = useState([]);
-    const [isMuted, setIsMuted] = useState(true); 
+    const [isMuted, setIsMuted] = useState(true);
+    const [volume, setVolume] = useState(50); 
     useEffect(() => {
         const unsubscribe = db.collection('reels').onSnapshot(snapshot => {
             setReels(snapshot.docs.map(doc => doc.data()));
@@ -15,6 +16,19 @@ function App() {
 
     const handleMuteToggle = () => {
         setIsMuted(!isMuted);
+        if (!isMuted) {
+            setVolume(50); 
+        }
+    };
+
+    const handleVolumeChange = (event) => {
+        const newVolume = parseFloat(event.target.value);
+        setVolume(newVolume);
+        if (newVolume === 0) {
+            setIsMuted(true);
+        } else {
+            setIsMuted(false);
+        }
     };
 
     return (
@@ -30,6 +44,8 @@ function App() {
                         shares={reel.shares}
                         isMuted={isMuted}
                         onMutePress={handleMuteToggle}
+                        volume={volume}
+                        onVolumeChange={handleVolumeChange}
                         avatarSrc={reel.avatarSrc}
                     />
                 ))}
