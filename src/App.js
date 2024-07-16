@@ -16,9 +16,6 @@ function App() {
 
     const handleMuteToggle = () => {
         setIsMuted(!isMuted);
-        if (!isMuted) {
-            setVolume(0); 
-        }
     };
 
     const handleVolumeChange = (event) => {
