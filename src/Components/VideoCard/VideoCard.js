@@ -4,6 +4,7 @@ import VideoHeader from '../VideoHeader/VideoHeader';
 import VideoFooter from '../VideoFooter/VideoFooter';
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
+import FullscreenIcon from '@material-ui/icons/Fullscreen';
 
 const VideoCard = ({ url, likes, shares, channel, song, avatarSrc, isMuted, onMutePress, volume, onVolumeChange }) => {
     const [isVideoPlaying, setIsVideoPlaying] = useState(false);
@@ -16,6 +17,32 @@ const VideoCard = ({ url, likes, shares, channel, song, avatarSrc, isMuted, onMu
         } else {
             videoRef.current.play();
             setIsVideoPlaying(true);
+        }
+    };
+
+    const handleFullScreen = () => {
+        if (!document.fullscreenElement) {
+            // Enter full screen
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.webkitRequestFullscreen) {
+                document.documentElement.webkitRequestFullscreen(); // Safari
+            } else if (document.documentElement.mozRequestFullScreen) {
+                document.documentElement.mozRequestFullScreen(); // Firefox
+            } else if (document.documentElement.msRequestFullscreen) {
+                document.documentElement.msRequestFullscreen(); // IE/Edge
+            }
+        } else {
+            // Exit full screen
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen(); // Safari
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen(); // Firefox
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen(); // IE/Edge
+            }
         }
     };
 
@@ -102,6 +129,9 @@ const VideoCard = ({ url, likes, shares, channel, song, avatarSrc, isMuted, onMu
                     onChange={onVolumeChange}
                     className="volumeControl__slider"
                 />
+                <button className='fullscreenButton' onClick={handleFullScreen}>
+                    <FullscreenIcon />
+                </button>
             </div>
             <VideoFooter
                 channel={channel}
